@@ -1482,6 +1482,7 @@ MonoBehaviour:
   player1: {fileID: 1824911694}
   player2: {fileID: 525790108}
   rollButton: {fileID: 1534387195}
+  disableRollDuration: 1.5
 --- !u!4 &2038010300
 Transform:
   m_ObjectHideFlags: 0
