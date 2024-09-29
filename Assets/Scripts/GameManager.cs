@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public Player player1;
     public Player player2;
     public Button rollButton; // Reference for Roll button
+    public float disableRollDuration = 1f; // Duration to disable Roll button
 
     private Player currentPlayer;
     private bool isRolling;
@@ -68,6 +69,8 @@ public class GameManager : MonoBehaviour
         {
             isRolling = true;
             dice.Roll();
+            rollButton.interactable = false; // Disable the Roll button
+            Invoke("EnableRollButton", disableRollDuration); // Re-enable after the specified duration
         }
     }
 
@@ -138,5 +141,10 @@ public class GameManager : MonoBehaviour
         rollButton.gameObject.SetActive(false); // Hide the Roll button
         turnText.gameObject.SetActive(false); // Hide the turn text
         // Optionally: Trigger any additional win logic here
+    }
+
+    private void EnableRollButton()
+    {
+        rollButton.interactable = true; // Re-enable the Roll button
     }
 }
