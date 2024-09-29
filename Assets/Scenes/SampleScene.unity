@@ -622,6 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSprite: {fileID: 525790110}
   cellPositions: []
+  playerType: 1
   PlayerName: mony
 --- !u!4 &525790109
 Transform:
@@ -1372,6 +1373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSprite: {fileID: 1824911696}
   cellPositions: []
+  playerType: 0
   PlayerName: Jhny
 --- !u!4 &1824911695
 Transform:
