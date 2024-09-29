@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     private int cellsToMove;
 
     public bool IsOutsideBoard => isOutsideBoard;
+    public bool IsMoving => isMoving; // Property to check if the player is currently moving
     public string PlayerName;
 
     // Define ladders and snakes using game board numbers
@@ -110,7 +111,7 @@ public class Player : MonoBehaviour
             if (elapsedTime >= 1f)
             {
                 currentCellIndex = targetCellIndex;
-                isMoving = false;
+                isMoving = false; // Mark as not moving after reaching the target
                 cellsToMove--;
 
                 if (currentCellIndex == cellPositions.Length - 1)
@@ -126,13 +127,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool HasWon()
-    {
-        return currentCellIndex == cellPositions.Length - 1;
-    }
-
     public void SetCellPositions(Vector3[] positions)
     {
         cellPositions = positions;
+    }
+
+    public bool HasWon()
+    {
+        return currentCellIndex == cellPositions.Length - 1; // Check if reached the last cell
     }
 }
