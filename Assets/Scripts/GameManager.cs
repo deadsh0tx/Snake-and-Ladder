@@ -11,14 +11,14 @@ public class GameManager : MonoBehaviour
     public Dice dice;
     public Player player1;
     public Player player2;
-    public Button rollButton; // Add this for Roll button reference
+    public Button rollButton; // Reference for Roll button
 
     private Player currentPlayer;
     private bool isRolling;
+    private bool gameEnded = false; // Track whether the game has ended
 
     void Awake()
     {
-        // Ensure there is only one instance of GameManager
         if (Instance == null)
         {
             Instance = this;
@@ -42,25 +42,29 @@ public class GameManager : MonoBehaviour
         currentPlayer = player1;
         turnText.text = currentPlayer.PlayerName + "'s Turn";
         isRolling = false;
+        gameEnded = false; // Reset the game end status at the start
         rollButton.gameObject.SetActive(true); // Ensure the roll button is active
         turnText.gameObject.SetActive(true); // Ensure the turn text is active
     }
 
     void Update()
     {
-        if (isRolling)
+        if (!gameEnded) // Only allow updates if the game hasn't ended
         {
-            HandleDiceRolling();
-        }
-        else
-        {
-            HandlePlayerMovement();
+            if (isRolling)
+            {
+                HandleDiceRolling();
+            }
+            else
+            {
+                HandlePlayerMovement();
+            }
         }
     }
 
     public void OnRollButtonClicked()
     {
-        if (!isRolling)
+        if (!isRolling && !gameEnded) // Prevent rolling if the game has ended
         {
             isRolling = true;
             dice.Roll();
@@ -92,9 +96,11 @@ public class GameManager : MonoBehaviour
                 currentPlayer.Move(diceValue);
             }
 
+            // Check if the current player has won immediately after moving
             if (currentPlayer.HasWon())
             {
                 EndGame(currentPlayer);
+                return; // Stop further actions like switching players
             }
             else
             {
@@ -112,10 +118,22 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
         turnText.text = currentPlayer.PlayerName + "'s Turn";
+
+        // Automatically trigger computer's turn
+        if (currentPlayer.playerType == PlayerType.Computer && !gameEnded)
+        {
+            Invoke("TriggerComputerMove", 1.5f); // Add slight delay for smoothness
+        }
+    }
+
+    private void TriggerComputerMove()
+    {
+        OnRollButtonClicked(); // Automatically roll the dice for the computer player
     }
 
     public void EndGame(Player winningPlayer)
     {
+        gameEnded = true; // Mark the game as ended
         statusText.text = winningPlayer.PlayerName + " wins!";
         rollButton.gameObject.SetActive(false); // Hide the Roll button
         turnText.gameObject.SetActive(false); // Hide the turn text

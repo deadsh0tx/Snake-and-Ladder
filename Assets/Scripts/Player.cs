@@ -1,9 +1,12 @@
 using UnityEngine;
 
+public enum PlayerType { Human, Computer }
+
 public class Player : MonoBehaviour
 {
     public SpriteRenderer playerSprite;
     public Vector3[] cellPositions;
+    public PlayerType playerType; // Define the player type (Human or Computer)
 
     private int currentCellIndex;
     private bool isOutsideBoard = true;
@@ -55,8 +58,7 @@ public class Player : MonoBehaviour
             // Handle case where the target cell index is beyond the board
             if (targetIndex >= cellPositions.Length)
             {
-                // Don't move if the dice roll goes beyond the final cell
-                targetIndex = currentCellIndex;
+                targetIndex = currentCellIndex; // Don't move if the dice roll goes beyond the final cell
             }
             else
             {
@@ -74,14 +76,12 @@ public class Player : MonoBehaviour
                     targetIndex = snakeTails[snakeIndex] - 1;
                 }
 
-                // If targetIndex is at or beyond the final cell
                 if (targetIndex >= cellPositions.Length - 1)
                 {
                     targetIndex = cellPositions.Length - 1;
                 }
             }
 
-            // Check if the player can move to the targetIndex
             if (currentCellIndex != targetIndex)
             {
                 cellsToMove = Mathf.Abs(targetIndex - currentCellIndex);
@@ -113,16 +113,13 @@ public class Player : MonoBehaviour
                 isMoving = false;
                 cellsToMove--;
 
-                // Check win condition immediately
                 if (currentCellIndex == cellPositions.Length - 1)
                 {
                     Debug.Log($"{PlayerName} wins!");
-                    // Call the GameManager's EndGame method to end the game
                     GameManager.Instance.EndGame(this);
                 }
                 else if (cellsToMove > 0)
                 {
-                    // Move to the next cell if there are remaining cells to move
                     StartMoveToCells(currentCellIndex, targetCellIndex);
                 }
             }
